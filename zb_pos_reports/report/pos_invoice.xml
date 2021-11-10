@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="pos_invoice_receipt_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                  <t t-call="zb_pos_reports.external_layout_pos_reports">  
+                    <div class="page">
+                      <center><span style="font-size:34px">POS INVOICE</span></center>
+                       <div class="row mt64">
+                		  <div  class="col-3">
+							 <div><span t-if="o.partner_id"><strong>Customer Address:</strong></span></div>
+                             <div t-if="o.partner_id">
+                               <div t-field="o.partner_id"
+                                   t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True}'/>
+                            </div> 
+						  </div>
+						  <div class="col-4">
+						  </div>
+						  <div class="col-2 pl-6 text-left">
+							<strong>No : <span t-if="o.name"></span></strong>
+                   			<br></br>
+                   			<strong>Receipt Ref : <span t-if="o.pos_reference"></span></strong>
+                   			<br></br>
+							<strong>Date : <span t-if="o.date_order"></span></strong>
+							<br></br>
+							<strong>SalesPerson : <span t-if="o.session_id.user_id"></span></strong>
+						  </div> 
+						  <div class="col-4" style="text-align:left">
+								<span t-if="o.name" t-field="o.name"/>
+                    			<br></br>
+								<span t-if="o.pos_reference" t-field="o.pos_reference"/>
+                    			<br></br>
+                    			<span t-if="o.date_order" t-field="o.date_order"/>
+								<br></br>
+								<span t-if="o.session_id.user_id" t-field="o.session_id.user_id"/>
+							    <br></br>
+						  </div>
+						</div>  
+                       <br></br>
+                      <div class="row" style="padding-right:20px;padding-left:10px;">
+                       		<table class='table table-bordered' style="font-size:20px;">
+	                        	<thead style="border-color:black;border:2px solid black;">
+		                            <tr>
+		                            	<th style="border-right-color:black;border-bottom-color:black;" class="text-left">Sl.No</th>
+		                            	<th style="border-right-color:black;border-bottom-color:black;" class="text-left">Description</th>
+		                                <th style="border-right-color:black;border-bottom-color:black;" class="text-right">Qty</th>
+		                                <th style="border-right-color:black;border-bottom-color:black;" class="text-right">Unit Price</th>
+		                                <th style="border-right-color:black;border-bottom-color:black;" class="text-right">SubTotal</th> 
+		                                <th style="border-right-color:black;border-bottom-color:black;" class="text-right">VAT%</th>
+<!-- 		                                <th style="border-right-color:black;border-bottom-color:black;" class="text-right">VAT Amount</th>
+ -->		                                <th style="border-bottom-color:black;border-right-color:black;" class="text-right">Amount</th>
+		                            </tr>
+		                        </thead>
+                             <tbody style="border-color:black;border:2px solid black">
+	                        	<t t-set="discount" t-value="0"/>
+	                        	<t t-set="disc" t-value="0"/>
+	                  			<t t-set="count" t-value="0"/>
+	                            <t t-foreach="o.lines" t-as="line">
+	                            	<t t-if="line.product_id.name == 'discount' or line.product_id.name == 'Discount'">
+				                		<t t-set="discount" t-value="discount + line.price_subtotal_incl"/>
+					            	</t>
+					            	<t t-else="">
+					            		<tr>
+					            		 <t t-set="count" t-value="count + 1"/>
+			                                <td style="border-right-color:black;">
+			                                	<span t-esc="count"/>
+			                                </td>
+						            		<td style="border-right-color:black;">
+						                        <t t-esc="line.product_id.name"/>
+						                    </td>
+						                    <td class="text-right" style="border-right-color:black;">
+						                        <t t-esc="line.qty"/>
+						                    </td>
+						                    <td class="text-right" style="border-right-color:black;">
+						                        <t t-esc="'{0:,.3f}'.format(line.price_unit)"/>  <span t-esc="o.pricelist_id.currency_id.symbol"/>
+						                    </td>
+						                    <td class="text-right" style="border-right-color:black;">
+						                        <t t-esc="'{0:,.3f}'.format(line.price_subtotal)"/>  <span t-esc="o.pricelist_id.currency_id.symbol"/>
+						                    </td>
+						                    <td class="text-right" style="border-right-color:black;">
+						                    	<t t-esc="line.tax_ids_after_fiscal_position.name"/>
+						                    </td>
+						                    <!-- <td class="text-right" style="border-right-color:black;">
+						                    	<t t-esc="'{0:,.3f}'.format(line.vat_amount)"/>  <span t-esc="o.pricelist_id.currency_id.symbol"/> 
+						                    </td> -->
+						                      <td class="text-right">
+						                        <t t-esc="'{0:,.3f}'.format(line.price_subtotal_incl)"/>  <span t-esc="o.pricelist_id.currency_id.symbol"/>
+						                    </td>
+					                    </tr>
+					            	</t>
+	                            
+				            	</t>
+				            </tbody>
+                       	</table>
+                       </div>		 
+                		<div class="row">
+                		    <div class="col-8">
+                    	    </div>
+	                       	<div class="col-2 text-right">
+	                       		<strong>Total VAT</strong>
+	                       	</div>
+	                       	<div class="col-2 text-right">
+	                       		<strong><span t-field="o.amount_tax"
+				                t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></strong>
+	                       	</div>
+                		</div>
+                		<div class="row">
+                		    <div class="col-8">
+                    	    </div>
+	                       	<div class="col-2 text-right">
+	                       		<strong>Net Amount</strong>
+	                       	</div>
+	                       	<div class="col-2 text-right">
+	                       		<strong><span t-field="o.amount_total"
+				                t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></strong>
+	                       	</div>
+                		</div>
+            
+           </div>
+          
+            </t> 
+            
+        </t> 
+         </t> 
+    </template>
+    
+     <template id="external_layout_without_header">
+		<t t-if="not o and doc">
+            <t t-set="o" t-value="doc"/>
+        </t>
+
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id.sudo()"/>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"/>
+        </t>
+        
+        <div class="article">
+            <t t-raw="0" />
+        </div>
+
+    </template>
+</odoo>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_pos_details_wizard_form" model="ir.ui.view">
+            <field name="name">wizard.pos.details.form</field>
+            <field name="model">wizard.pos.details</field>
+            <field name="arch" type="xml">
+                <form string="Sales Details Report">
+                    <group>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                    </group>
+                    <group>
+                    	<field name="report_detail" widget="radio"/>
+                    </group>
+                    <group>
+                        <field name="pos_config_ids" colspan="4" nolabel="1" widget="many2many_tags"/>
+                    </group>
+                    <footer>
+                        <button name="print_customer_statement" string="Print" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+		<record id="action_report_pos_sales_details" model="ir.actions.act_window">
+            <field name="name"> Daily Sales Details</field>
+            <field name="res_model">wizard.pos.details</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        
+        <menuitem id="menu_pos_reports" name="POS Reports" parent="base.menu_board_root" sequence="13"/>
+
+        <menuitem id="menu_report_sales_details"
+		       name="Daily Sales Details" 
+		       action="action_report_pos_sales_details" 
+		       parent="menu_pos_reports" 
+		       />
+</odoo>

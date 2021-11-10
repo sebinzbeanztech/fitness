@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		    
+     <template id="external_layout_pos_reports">
+        <t t-if="not o" t-set="o" t-value="doc"/>
+
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+<!--         <t t-if="company.external_report_layout_id" t-call="{{company.external_report_layout_id.key}}"><t t-raw="0"/></t>
+ -->        <t  t-call="zb_pos_reports.external_layout_standard_pos_reports"><t t-raw="0"/></t>
+     </template>
+	
+		 <template id="external_layout_standard_pos_reports">
+		    	<t t-if="not o" t-set="o" t-value="doc"/>
+
+			        <t t-if="not company">
+			            <!-- Multicompany -->
+			            <t t-if="company_id">
+			                <t t-set="company" t-value="company_id"/>
+			            </t>
+			            <t t-elif="o and 'company_id' in o">
+			                <t t-set="company" t-value="o.company_id.sudo()"/>
+			            </t>
+			            <t t-else="else">
+			                <t t-set="company" t-value="res_company"/>
+			            </t>
+        		</t>
+		    	<div class="header">
+		            <div class="col-xs-12">
+			                    <img t-if="company.header_image"  t-att-src="'data:image/png;base64,%s' %to_text(company.header_image)" style="max-height:220px;max-width:27cm;"/>
+		             </div>
+		           </div>
+		
+		         <div class="article o_report_layout_standard">
+		            <t t-raw="0"/>
+		        </div> 
+		
+		    	<div class="footer">
+		           <div class="row" style="padding-top:0.5cm;">
+						<div class="col-xs-12">
+			                    <img t-if="company.footer_image"  t-att-src="'data:image/png;base64,%s' %to_text(company.footer_image)" style="max-height:140px;max-width:100000px"/>
+			       	   </div>
+					</div>
+		        </div> 
+		</template>
+	</data>
+</odoo>

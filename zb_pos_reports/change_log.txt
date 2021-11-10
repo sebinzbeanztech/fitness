@@ -1,0 +1,78 @@
+Version 1.26 2021-11-08
+   Header and footer added on company form
+
+Version  1.25 - 22/09/2021 by Jeena
+  [ZB-6869] Install Inforise Reports package
+
+Version  1.24 - 17/09/2021 by Jeena
+  [ZB-6869] Install Inforise Reports package
+
+Version  1.23 - 06/09/2021 by Jeena
+  [ZB-6869] Install Inforise Reports package
+Version  1.22 - 03/09/2021 by Jeena
+	
+	[ZB-6938] POS receipt from POS front end
+Version  1.21 - 01/09/2021 by Jeena
+	[ZB-6869] Install Inforise Reports package
+
+Version  1.20 - 01/09/2021 by Jeena
+	[ZB-6869] Install Inforise Reports package
+Version  1.18,1.19 - 27/04/2021 by Davis
+	* 5474 -feedback points
+
+
+
+Version  1.17 - 27/04/2021 by Davis
+	* 5474, 5751
+
+
+Version  1.16 - 18/03/2021 by Davis
+	* Amount in words in pos receipt  
+
+Version  1.15 - 05/03/2021 by Dhanalakshmi
+	* ZB-5474 - POS Invoice Print on Dot Matrix - Feedback points  
+
+Version  1.14 - 27/02/2021 by Dhanalakshmi
+	* ZB-5474 - POS Invoice Print on Dot Matrix - Feedback points
+
+Version  1.13 - 26/02/2021 by Dhanalakshmi
+	* ZB-5474 - POS Invoice Print on Dot Matrix - Layout correction
+
+Version  1.12 - 26/02/2021 by Davis
+	* ZB-5474 - POS Invoice Reciept on Dot Matrix
+
+Version  1.11 - 19/02/2021 by Dhanalakshmi
+	* ZB-5474 - POS Invoice Print on Dot Matrix
+
+Version  1.10 - 22/01/2021 by Dhanalakshmi
+	* ZB-5436 - Daily Sales Report - Corrected total column value
+
+Version  1.9 - 21/01/2021 by Dhanalakshmi
+	* ZB-5436 - Daily Sales Report Issues
+
+Version  1.8 - 19/01/2021 by Dhanalakshmi
+	* ZB-5434 - Alignment issue - Periodic Sales Report
+
+Version  1.7 - 18/01/2021 by Thaslima
+	ZB-5423-Install the POS Daily Sales report and Periodic sales report (Inforise IT reports)
+	
+Version  1.6 - 29/11/2020 by Thaslima
+	ZB-5062-POS - Bill print format
+
+Version  1.5 - 29/11/2020 by Thaslima
+	ZB-5062-POS - Bill print format
+
+Version  1.4 - 25/11/2020 by Thaslima
+	ZB-5062-POS - Bill print format
+
+Version  1.3 - 24/11/2020 by Thaslima
+	ZB-5062-POS - Bill print format
+	
+Version  1.2 - 20/11/2020 by Thaslima
+	ZB-5062-POS - Bill print format
+
+Version  1.1 - 20/11/2020 by Thaslima
+	ZB-5062-POS - Bill print format
+
+Version  1.0 - 22/07/2020 by Rilu
+	* POS Receipt Migration : Frontend and backend

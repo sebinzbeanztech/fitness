@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+      
+         
+           <report id="action_report_sales" 
+           string="Sales Details" 
+           model="wizard.pos.details" 
+           report_type="qweb-pdf" 
+           name="zb_pos_reports.report_detailsofsales" 
+           file="zb_pos_reports.report_detailsofsales"
+           />
+           
+             <!-- **Quotation Report Paperformat** -->
+        <record id="paperformat_sales_details" model="report.paperformat">
+            <field name="name">European A4(Sales Details)</field>
+            <field name="default" eval="True" />
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">52</field>
+            <field name="margin_bottom">34</field>
+            <field name="margin_left">2</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">57</field>
+            <field name="dpi">90</field>
+        </record>
+        
+        <record id="action_report_sales" model="ir.actions.report">
+			<field name="paperformat_id" ref="paperformat_sales_details"/>
+		</record>
+            
+            <record id="new_paperformat_possales_report"
+            model="report.paperformat">
+            <field name="name">Periodic Sales Report</field>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="default" eval="True" />
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">49</field>
+            <field name="margin_bottom">32</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_spacing">53</field>
+            <field name="dpi">90</field>
+        </record>
+         
+           
+           
+            <report
+            id="action_pos_session_report"
+            model="pos.session"
+            string="Session Summary Report"
+            report_type="qweb-pdf"
+            name="zb_pos_reports.pos_session_report_template_new"
+            file="zb_pos_reports.pos_session_report_template_new"
+        	paperformat="zb_pos_reports.new_paperformat_possales_report"/>
+        />
+        
+       
+         
+       
+       
+         
+         
+         <report
+            id="report_periodicsaless"
+            model="periodic.sales.reports"
+            string="Periodic Sales Report"
+            report_type="qweb-pdf"
+            name="zb_pos_reports.report_periodic_saless"
+            file="zb_pos_reports.report_periodic_saless"
+            paperformat="zb_pos_reports.new_paperformat_possales_report"/>
+        />
+        
+        <!-- POS Receipt Report -->
+		<report 
+            id="report_receipt_pos_a4"
+            string="POS Receipt"
+            model="pos.order" 
+            report_type="qweb-pdf"
+            file="zb_pos_reports.report_receipt_a4" 
+            name="zb_pos_reports.report_receipt_a4" 
+            paperformat="zb_pos_reports.new_paperformat_possales_report"
+        />
+        
+        <!--  ********Receipt Report Paperformat Custom********* -->
+		<!-- <record id="paperformat_receipt_a4" model="report.paperformat">
+			<field name="name">Point Of Sale Receipt(A4)</field>
+			<field name="default" eval="True"/>
+			<field name="format">A4</field>
+			<field name="page_height">0</field>
+			<field name="page_width">0</field>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">40</field>
+			<field name="margin_bottom">40</field>
+			<field name="margin_left">10</field>
+			<field name="margin_right">10</field>
+			<field name="header_line" eval="False"/>
+			<field name="header_spacing">35</field>
+			<field name="dpi">130</field>
+		</record> -->
+		
+		<!-- <record id="report_receipt_pos_a4" model="ir.actions.report">
+			<field name="paperformat_id" ref="zb_pos_reports.paperformat_receipt_a4"/>
+		</record> -->
+		
+		<!--  POS Invoice Report  -->
+		<!-- <report 
+            id="report_receipt_pos_invoice"
+            string="POS Invoice"
+            model="pos.order" 
+            report_type="qweb-pdf"
+            file="zb_pos_reports.pos_invoice_receipt_report" 
+            name="zb_pos_reports.pos_invoice_receipt_report" 
+        />
+        
+         POS Invoice Report Paperformat 
+		<record id="paperformat_receipt_pos_invoice" model="report.paperformat">
+			<field name="name">POS Invoice</field>
+			<field name="default" eval="True"/>
+		    <field name="format">A4</field>
+		    <field name="page_height">0</field>
+		    <field name="page_width">0</field>
+		    <field name="orientation">Portrait</field>
+		    <field name="margin_top">40</field>
+		    <field name="margin_bottom">50</field>
+		    <field name="margin_left">0</field>
+		    <field name="margin_right">0</field>
+		    <field name="header_line" eval="False"/>
+		    <field name="header_spacing">60</field>
+		    <field name="dpi">90</field>
+		</record>
+		
+		<record id="report_receipt_pos_invoice" model="ir.actions.report">
+			<field name="paperformat_id" ref="zb_pos_reports.paperformat_receipt_pos_invoice"/>
+		</record>
+		 -->
+</data>
+</odoo>

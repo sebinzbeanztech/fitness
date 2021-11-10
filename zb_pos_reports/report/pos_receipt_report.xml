@@ -1,0 +1,219 @@
+<odoo>
+	<template id="report_receipt_a4">
+	    <t t-call="web.html_container">
+	        <t t-foreach="docs" t-as="order">
+	        	<t t-call="zb_pos_reports.external_layout_pos_reports"> 
+	           		<div class="page" style="font-size:18px;">
+	           		  <div class="row " style=
+                      "width:110%;">
+                   
+               </div>
+              			<!--  <div class="text-center">
+			 					<img src="/zb_kooheji13/static/src/img/image.png" align='center' height="150px" width="150px"/>
+				            </div> -->
+						<h1><center>POS Invoice</center></h1>
+					  <center>VAT No.<t t-esc="order.company_id.vat"/></center><br/>
+						<div class="row mt64">
+							<div  class="col-3">
+								 <div>
+	                                <span t-if="order.partner_id"><strong>Customer Address:</strong></span>
+	                            </div>
+	                            <div t-if="order.partner_id">
+	                               <div t-field="order.partner_id"
+	                                   t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True}'/>
+	                            </div> 
+							</div>
+							<div class="col-4">
+							</div>
+							<div class="col-2 pl-6 text-left">
+								<b t-if="order.name">No</b><br/>
+								<p/>
+								<b t-if="order.pos_reference">Receipt Ref</b><br/>
+								<p/>
+								<b t-if="order.date_order">Date</b><br/>
+								<p/>
+								<!-- <b t-if="order.company_id.vat_no">VAT No</b><br/>
+								<p/> -->
+								<b t-if="order.session_id.user_id">SalesPerson</b><br/>
+							</div>
+							
+							<div class="col" style="max-width: 5px;" >
+                              <!-- <div class="row">:</div>
+                               <div class="row">:</div>
+                             	<div class="row">:</div>
+                              <div class="row">:</div> -->
+                              	<b>:</b><br/>
+								<p/>
+								<b>:</b><br/>
+								<p/>
+								<b>:</b><br/>
+								<p/>
+								<b>:</b><br/>
+								<p/>
+								</div>
+							<div class="col-3">
+								<span t-if="order.name" t-field="order.name"/><br/>
+								<p/>
+								<span t-if="order.pos_reference" t-field="order.pos_reference"/><br/>
+								<p/>
+								<span t-if="order.date_order" t-field="order.date_order"/><br/>
+								<p/>
+								<!-- <span t-if="order.company_id.vat_no" t-field="order.company_id.vat_no"/><br/>
+								<p/> -->
+								<span t-if="order.session_id.user_id" t-field="order.session_id.user_id"/><br/>
+							</div>
+						</div>
+						
+			            <hr></hr>
+				        
+			            <t t-set="total_price" t-value="0"/>
+			            <t t-set="total_disc" t-value="0"/>
+			            <table class='table table-bordered' style="font-size:20px;">
+					        <thead style="border-color:black;border:2px solid black;">
+	                            <tr>
+	                            	<th style="border-right-color:black;border-bottom-color:black;">Sl.No</th>
+	                            	<th style="border-right-color:black;border-bottom-color:black;">Description</th>
+	                                <th style="border-right-color:black;border-bottom-color:black;" class="text-right">Qty</th>
+	                                <th style="border-right-color:black;border-bottom-color:black;" class="text-right">Unit Price</th>
+	                                <th style="border-right-color:black;border-bottom-color:black;" class="text-right">SubTotal</th> 
+	                                <th style="border-right-color:black;border-bottom-color:black;" class="text-right">VAT%</th>
+<!-- 	                                <th style="border-right-color:black;border-bottom-color:black;" class="text-right">VAT Amount</th>
+ -->	                                <th style="border-bottom-color:black;border-right-color:black;" class="text-right">Amount</th>
+	                            </tr>
+	                        </thead>
+	                        <tbody style="border-color:black;border:2px solid black">
+	                        	<t t-set="discount" t-value="0"/>
+	                        	<t t-set="disc" t-value="0"/>
+	                  			<t t-set="count" t-value="0"/>
+	                            <t t-foreach="order.lines" t-as="line">
+	                            	<t t-if="line.product_id.name == 'discount' or line.product_id.name == 'Discount'">
+				                		<t t-set="discount" t-value="discount + line.price_subtotal_incl"/>
+					            	</t>
+					            	<t t-else="">
+					            		<tr>
+					            		 <t t-set="count" t-value="count + 1"/>
+			                                <td style="border-right-color:black;">
+			                                	<span t-esc="count"/>
+			                                </td>
+						            		<td style="border-right-color:black;">
+						                        <t t-esc="line.product_id.name"/>
+						                    </td>
+						                   <!--  <td style="border-right-color:black;">
+						                        <t t-esc="line.product_id.color"/>
+						                    </td>
+						                    <td style="border-right-color:black;">
+						                        <t t-esc="line.product_id.size"/>
+						                    </td>
+						                    <td style="border-right-color:black;">
+						                        <t t-esc="line.product_id.dm"/>
+						                    </td> 
+						                    <td style="border-right-color:black;"> 
+						                        <t t-esc="line.product_id.barcode"/>
+						                    </td> -->
+						                    <td class="text-right" style="border-right-color:black;">
+						                        <t t-esc="line.qty"/>
+						                    </td>
+						                    <td class="text-right" style="border-right-color:black;">
+						                        <t t-esc="'{0:,.3f}'.format(line.price_unit)"/>  <span t-esc="order.pricelist_id.currency_id.symbol"/>
+						                    </td>
+						                    <td class="text-right" style="border-right-color:black;">
+						                        <t t-esc="'{0:,.3f}'.format(line.price_subtotal)"/>  <span t-esc="order.pricelist_id.currency_id.symbol"/>
+						                    </td>
+						                    <td class="text-right" style="border-right-color:black;">
+						                    	<t t-esc="line.tax_ids_after_fiscal_position.name"/>
+						                    </td>
+						                    <!-- <td class="text-right" style="border-right-color:black;">
+						                    	<t t-esc="'{0:,.3f}'.format(line.vat_amount)"/>  <span t-esc="order.pricelist_id.currency_id.symbol"/> 
+						                    </td> -->
+						                      <td class="text-right">
+						                        <t t-esc="'{0:,.3f}'.format(line.price_subtotal_incl)"/>  <span t-esc="order.pricelist_id.currency_id.symbol"/>
+						                    </td>
+					                    </tr>
+					            	</t>
+	                            
+				            	</t>
+				            </tbody>
+				            		
+				                    <tr>
+				                    	<td style="text-align:right" colspan="6"><strong>Total VAT</strong></td>
+				                    	<td class="text-right" >
+				                                <strong><span t-esc="'{0:,.3f}'.format(order.amount_tax)"/><span t-esc="order.pricelist_id.currency_id.symbol"/></strong>
+				                        </td>
+				                    </tr>
+				                    <tr>
+				                    	<td style="text-align:right" colspan="6"><strong>Net Amount</strong></td>
+				                    	 <td class="text-right">
+				                               <strong><span t-esc="'{0:,.3f}'.format(order.amount_total)"/><span t-esc="order.pricelist_id.currency_id.symbol"/></strong>
+				                         </td>
+				                    </tr>
+			            </table>
+			           
+			         <!--  <b><span style="font-size:20px;">AMOUNT IN WORDS</span></b><br></br>
+			       	    
+			       	    <span style="font-size:20px;" t-esc="order.amount_to_text(order.amount_total,order)"/><br></br> -->
+			    	</div> 
+			    	       
+	            </t>
+	        </t>
+	    </t>
+	</template>
+	
+	
+	
+	
+	
+	<template id="external_layout_pos">
+        <!-- Multicompany -->
+        <t t-if="not o and doc">
+            <t t-set="o" t-value="doc"/>
+        </t>
+
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id.sudo()"/>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"/>
+        </t>
+
+        <t t-if="company.external_report_layout == 'background'">
+            <t t-call="web.external_layout_background"><t t-raw="0"/></t>
+        </t>
+        <t t-if="company.external_report_layout == 'boxed'">
+            <t t-call="web.external_layout_boxed"><t t-raw="0"/></t>
+        </t>
+        <t t-if="company.external_report_layout == 'clean'">
+            <t t-call="web.external_layout_clean"><t t-raw="0"/></t>
+        </t>
+        <t t-if="company.external_report_layout in (False, 'standard')">
+            <t t-call="zb_pos_reports.external_layout_header_footer"><t t-raw="0"/></t>
+        </t>
+    </template>
+    
+    <template id="external_layout_header_footer">
+    	<!-- <div class="header">
+            <div class="row">
+            		<div class="col-xs-9">
+                         <img t-if="company.header_image"  t-att-src="'data:image/png;base64,%s' %to_text(company.header_image)" style="max-height:100px;max-width:100000px"/>
+            	   </div>
+             </div>
+           </div>
+ -->
+        <div class="article o_report_layout_standard">
+            <t t-raw="0"/>
+        </div>
+
+		<!-- <div class="footer">
+        	<div class="text-center" style="border-top: 1px solid black;font-size:22px;">        
+          		<ul class="list-inline">
+                <li>Page:</li>
+                <li><span class="page"/></li>
+                <li>/</li>
+                <li><span class="topage"/></li>
+            	</ul> 
+        	</div>
+        	<div class="row">
+        	    <img t-if="company.footer_image"  t-att-src="'data:image/png;base64,%s' %to_text(company.footer_image)" style="height:4cm"/>
+            </div>
+        </div> -->
+    </template>
+</odoo>

@@ -1,0 +1,25 @@
+.screen .centered-content
+{
+	right: 5%;
+	left: 5%;
+}
+.pos .pos-receipt-container > div
+{
+	width: 217mm;
+    padding: 10px;
+	
+}
+@media print {
+    
+    .pos .pos-receipt{
+        margin: 0;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        border: none !important;
+        font-size: 13px !important;
+        width:217mm !important;
+        padding: 10px  !important;
+       
+    }
+    
+}

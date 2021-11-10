@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-extend="OrderReceipt">
+        <t t-jquery=".pos-receipt" t-operation='replace'>
+            <div class="pos-receipt">
+                <center style="font-size:20px;padding-top:3.8cm;">TAX CASH INVOICE</center><br />
+                <br />
+                <div class="row mt64">
+                    <!-- <t t-if="order.get_client()">
+	            		  <div class="col-3">
+		            		  <t t-if="order.get_client()">
+		                	 	<strong>Customer Address:</strong><br/>
+		                	 	<t t-esc="order.get_client().name"/><br/>
+		                      </t> 
+		                      <t t-if="order.get_client().street">
+		                	 	<t t-esc="order.get_client().street"/><br/>
+		                      </t>
+		                      <t t-if="order.get_client().street2">
+		                	 	<t t-esc="order.get_client().street2"/><br/>
+		                      </t>
+		                      <t t-if="order.get_client().city">
+		                	 	<t t-esc="order.get_client().city"/>
+		                      </t>
+		                      <t t-if="order.get_client().zip">
+		                	 	<t t-esc="order.get_client().zip"/><br/>
+		                      </t>
+		                       <t t-if="order.get_client().phone">
+		                	 	<t t-esc="order.get_client().phone"/><br/>
+		                      </t>
+						  </div>
+					   </t>	  -->
+                    <div class="col-6 pos-left-align" style="padding-left: 12cm;">
+                        <!--  <t t-if="order.name"><strong>No :</strong>&#160;&#160;&#160;&#160;&#160;&#160;<span style="padding-left: 3cm;" t-esc="order.name"/><br/></t> -->
+                        <t t-if="order.name"><strong style="width:130px;display:inline-block">Receipt Ref </strong><strong style="display:inline-block;width:20px;text-align:center;">:</strong><span style="width:auto;display:inline-block" t-esc="order.name" /><br /></t>
+                        <t t-if="order.formatted_validation_date"><strong style="width:130px;display:inline-block;">Date </strong><strong style="display:inline-block;width:20px;text-align:center;">:</strong><span style="width:auto;display:inline-block" t-esc="order.formatted_validation_date" /><br /></t>
+                        <t t-if="widget.pos.get_cashier()"><strong style="width:130px;display:inline-block">SalesPerson </strong><strong style="display:inline-block;width:20px;text-align:center;">:</strong><span style="width:auto;display:inline-block" t-esc="widget.pos.get_cashier().name" /><br /></t>
+                    </div>
+                </div>
+                <br></br>
+                <table class='table table-bordered' style="width:95%;">
+                    <colgroup>
+                        <col width='5%' />
+                        <col width='18%' />
+                        <col width='5%' />
+                        <col width='8%' />
+                        <col width='14%' />
+                        <col width='10%' />
+                        <col width='8%' />
+                    </colgroup>
+                    <thead style="border-color:black;border:2px solid black;">
+                        <tr>
+                            <td class="pos-left-align" style="border-right-color:black;border-bottom-color:black;">Sl.No</td>
+                            <td class="pos-left-align" style="border-right-color:black;border-bottom-color:black;">Description</td>
+                            <td class="pos-right-align" style="border-right-color:black;border-bottom-color:black;">Qty</td>
+                            <td class="pos-right-align" style="border-right-color:black;border-bottom-color:black;">Unit Price</td>
+                            <td class="pos-center-align" style="border-right-color:black;border-bottom-color:black;">VAT%</td>
+                            <td class="pos-right-align" style="border-right-color:black;border-bottom-color:black;">VAT Amount</td>
+                            <td class="pos-right-align" style="border-right-color:black;border-bottom-color:black;">Amount</td>
+                        </tr>
+                    </thead>
+                    <tbody style="border-color:black; border:2px solid black; height:10cm; cellpadding:0; cellspacing:0;">
+                        <t t-set="discount" t-value="0" />
+                        <t t-set="count" t-value="0" />
+                        <tr t-foreach="orderlines" t-as="orderline">
+                            <t t-set="count" t-value="count + 1" />
+                            <td class="pos-left-align" style="border-right-color:black;">
+                                <t style="font-size:4px;" t-esc="count" />
+                            </td>
+                            <td class="pos-left-align" style="border-right-color:black;">
+                                <t t-if="!orderline.promotion">
+                                    <t t-esc="orderline.get_product().display_name" />
+                                </t>
+                                <t t-if="orderline.promotion">
+                                    <t t-esc="orderline.reason" />
+                                </t>
+                                <t t-if="orderline.get_discount() > 0">
+                                    <div class="pos-disc-font">
+                                        With a
+                                        <t style="font-size:4px;" t-esc="orderline.get_discount()" />% discount
+                                    </div>
+                                </t>
+                            </td>
+                            <td class="pos-right-align" style="border-right-color:black;">
+                                <t style="font-size:4px;" t-esc="orderline.get_quantity_str_with_unit()" />
+                            </td>
+                            <td class="pos-right-align" style="border-right-color:black;">
+                                <t style="font-size:4px;" t-esc="widget.format_currency_no_symbol(orderline.get_unit_display_price())" />
+                            </td>
+                            <td class="pos-center-align" style="border-right-color:black;">
+                                <t t-foreach="order.get_tax_details()" t-as="taxdetail">
+                                    <t t-esc="taxdetail.name" />
+                                </t>
+                            </td>
+                            <td class="pos-right-align" style="border-right-color:black;">
+                                <t t-esc="widget.format_currency_no_symbol(orderline.get_tax())" />
+                            </td>
+                            <td class="pos-right-align" style="border-right-color:black;">
+                                <t style="font-size:4px;" t-esc="widget.format_currency_no_symbol(orderline.get_display_price())" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row" style="float:left">
+                    <div class="col-md-8 pos-left-align" id="amount_in_words" style="text-transform:capitalize;width:15.2cm;float:left;">
+                        <span style="padding-left:1px;">
+                           <strong> <t t-esc="order.get_total_in_words(order.get_total_with_tax())" />  Only.</strong>
+                        </span>
+                    </div>
+                    <div class="col-4 pos-right-align" style="float:left;text-align:left;width:5.4cm;">
+                        <strong>Total VAT </strong>
+                        <t t-foreach="order.get_tax_details()" t-as="taxdetail">
+                            <t class="pos-right-align">
+                                <strong class="pos-receipt-right-align"><span style="padding-left:1.55cm;" t-esc="widget.format_currency(taxdetail.amount)" /></strong>
+                            </t>
+                        </t>
+                        
+                    </div>
+                </div>
+                <div class="row" >
+                    <div class="col-4" style="padding-left: 14.6cm;float:left;text-align:left;width:6cm;">
+                        <strong>Net Amount
+                            <span style="padding-left:0.8cm;" class="pos-receipt-right-align" t-esc="widget.format_currency(order.get_total_with_tax())" /> </strong>
+                    </div>
+                </div>
+                <t t-if="order.get_client()">
+                    <br /> <br />
+                    <div class="row">
+                        <div class="col-4 pos-left-align">
+                            <strong>Customer </strong>
+                            <span style="padding-left:1cm;" t-esc="order.get_client().name" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 pos-left-align">
+                            <t t-if="order.get_client().vat">
+                                <strong>VAT NO.</strong>
+                                <span style="padding-left:1.2cm;" t-esc="order.get_client().vat" />
+                            </t>
+                        </div>
+                    </div>
+                </t>
+                
+                <t t-foreach='paymentlines' t-as='line'>
+                    <br /> <br />
+                    <div style="margin-top:10px;">
+                        <t t-if='line.payment_method.is_cash_count'>
+                            <div class="row " style="float:left">
+                                <div style="float:left;width:5.4cm" class="pos-receipt-left-align">
+                                   <strong> Cash  </strong>
+                                </div>
+                                <div style="float:left">:</div>
+                                <div style="float:left;width:2.4cm;text-align:right">
+                                    <span t-esc='widget.format_currency_no_symbol(order.get_due(line))' class="pos-receipt-left-align"/>
+                                </div>
+                            </div><br/>
+                            <div class="row" style="float:left;">
+                                <div style="float:left;width:5.4cm" class="pos-receipt-left-align">
+                                     <strong><t t-esc="line.payment_method.name"/> Tendered</strong>
+                                </div>
+                                <div style="float:left">:</div>
+                                <div style="float:left;width:2.4cm;text-align:right">
+                                    <span t-esc='widget.format_currency_no_symbol(line.get_amount())' class="pos-receipt-left-align"/>
+                                </div>
+                            </div><br/>
+                            <div class="row" style="float:left" t-if='order.get_change(line)'>
+                                <div style="float:left;width:5.4cm" class="pos-receipt-left-align">
+                                    <strong> Balance</strong>
+                                </div>
+                                <div style="float:left">:</div>
+                                <div style="float:left;width:2.4cm;text-align:right" class="pos-receipt-right-align">
+                                    <span t-esc='widget.format_currency_no_symbol(order.get_change(line))' class="pos-receipt-left-align"/>
+                                </div>
+                            </div>
+                            
+                        </t>
+                        <t t-if='line.payment_method.need_details'>
+                            <t t-if="line.payment_type=='card'">
+                                <span class="pos-receipt-left-align">
+                                	<div class="row">
+                                		<div class="col-md-2" style="width:70px;float:left;"><b >Card No:</b></div>
+                                		<div class="col-md-8" style="width:70px;float:left;"><t t-esc="line.card_no"/></div>
+                                	</div>
+                                </span>
+                            </t>
+                            <t t-if="line.payment_type=='cheque'">
+                                <span class="pos-receipt-left-align">
+                                	<div class="row">
+                                		<div class="col-md-2"  style="width:100px;float:left;"><b >Cheque No:</b></div>
+                                		<div class="col-md-2"  style="width:150px;float:left;"><t t-esc="line.cheque_no"/></div>
+                                		<div class="col-md-2" style="width:120px;float:left;"><b >Cheque Date:</b></div>
+                                		<div class="col-md-2" style="width:100px;float:left;">
+                                        <t t-esc="moment(line.cheque_date).format('DD/MM/YYYY')"/></div>
+                                		<div class="col-md-2" style="width:70px;float:left;"><b >Bank:</b></div>
+                                		<div class="col-md-2" style="width:120px;float:left;"><t t-esc="line.cheque_bank"/></div>
+                                	</div>
+                                </span>
+                            </t>
+                            
+                        </t>
+                    </div>
+                </t>
+                <br /><br />
+               <t t-if="order.note">
+	                <table>
+	                    <t t-if="order.note">
+	                        <tr>
+	                            <td>Note:</td>
+	                            <td class="pos-right-align">
+	                                <t t-esc="order.note" />
+	                            </td>
+	                        </tr>
+	                    </t>
+	                </table>
+	            </t>           
+                <br /><br />
+                <div class="row">
+                    <div class="col-4 pos-center-align" style="padding-bottom: 6cm;">
+                        <strong>Exchange/Refund permitted with in 7 days of purchase for unused goods. <br></br>
+                            Returned in original packing presented along with the original Cash Memo Only.
+                        </strong>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </t>
+    <t t-name="OrderWidget">
+        <div class="order-container">
+            <div class="order-scroller touch-scrollable">
+                <div class="order">
+                    <t t-if="orderlines.length === 0">
+                        <div class='order-empty'>
+                            <i class='fa fa-shopping-cart' />
+                            <h1>Your shopping cart is empty</h1>
+                        </div>
+                    </t>
+                    <t t-if="orderlines.length > 0">
+                        <ul class="orderlines"></ul>
+                        <div class="summary clearfix">
+                            <div class="line">
+                                <div class='entry total'>
+                                    <span class="label">Total: </span> <span class="value">0.00 €</span>
+                                    <div class='subentry'>Vat: <span class="value">0.00€</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

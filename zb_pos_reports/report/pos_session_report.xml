@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="pos_session_report_template_new">
+          <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="zb_pos_reports.external_layout_pos_reports">
+                    <div class="page">
+                        <br/><br/>
+                        <div class="oe_structure"/>
+                        <h2>
+                           <span>Session Summary: <span t-field="doc.name"/></span>
+                        </h2>
+                        <div class="row mt32 mb32">
+                        <div class="col-3">
+                                <strong>Responsible:</strong>
+                                <p t-field="doc.user_id"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>Point Of Sale:</strong>
+                                <p t-field="doc.config_id"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>Opening Date:</strong>
+                                <p t-field="doc.start_at"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>Closing Date:</strong>
+                                <p t-field="doc.stop_at"/>
+                            </div>
+                        </div>
+						<div class="row" style="font-size:14pt;">
+						<div class="col-7">
+                        <span>Statement Summary</span>
+                        </div>
+                        </div>
+                        <br></br>
+                        <table class="table table-condensed table-striped">
+                            <thead>
+                                <tr>
+                                   <th class="text-left">Payment Method</th>
+                                   <th class="text-right">Amount</th>
+                                    <!-- <th>Reference</th>
+                                    <th class="text-right">Journal</th>
+                                    <th class="text-right">Starting Balance</th>
+                                     <th class="text-right">Total Transactions</th>
+                                    <th class="text-right">Ending Balance</th>
+                                    <th class="text-right">Difference</th>
+                                    <th class="text-right">Currency</th>
+                                    <th class="text-right">Status</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                              <t t-set="total_payment" t-value="0"></t>
+                              <tr t-foreach='payment_data' t-as='payment'>
+		                    		<td><t t-esc="payment['name']" /></td>
+				                    <td class="text-right">
+				                      <t t-set="total_payment" t-value="total_payment+payment['sum']"/>
+				                    	<strong t-esc="'%.3f'%(payment['sum'])"/>&#160;<strong t-esc="res_company.currency_id.symbol"></strong>
+				                    </td>
+				                  
+				                   <!--  <td class="text-right">
+				                    	<t t-set="total_payment" t-value="total_payment+payment['sum']"/>
+				                    	 <strong t-esc="'%.3f'%(payment['sum'])"/>&#160;<strong t-esc="res_company.currency_id.symbol"></strong>
+				                    </td> -->
+	                			</tr>
+                               <!--  <t t-foreach="doc.statement_ids" t-as="record">
+                                    <tr>
+                                        <td>
+                                            <span t-field="record.name"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="record.journal_id"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="record.balance_start"/>
+                                        </td>
+                                         <td class="text-right">
+                                            <span t-field="record.total_entry_encoding"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="record.balance_end_real"/>
+                                        </td>
+                                       
+                                        <td class="text-right">
+                                            <span t-field="record.difference"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="record.currency_id"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="record.state"/>
+                                        </td>
+                                    </tr>
+                                </t> -->
+                            </tbody>
+                        </table>
+                        <!-- <t t-foreach="doc.statement_ids" t-as="statement">
+						<div class="row" style="font-size:14pt;">
+						<div class="col-7">
+                        <span t-if="statement.line_ids">Statement Details:<span t-esc="statement.name"/></span>
+                        </div>
+                        </div>
+                        <br></br>
+                        <table class="table table-condensed table-striped">
+                            <thead>
+                                <tr>
+                                	 <th>Date</th>
+                                	 <th>Description</th>
+                                    <th>Reference</th>
+                                   
+                                    <th>Partner</th>
+                                   <th>Account</th>
+                                    <th class="text-right">Amount</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                    <t t-if="statement.journal_id.type == 'cash'">
+                                        <span t-set="total_cash" t-value="0"/>
+                                        <tr>
+                                            <td>
+                                                <b><span t-field="statement.journal_id"/></b>
+                                            </td>
+                                            <td colspan='5'></td>
+                                        </tr>
+                                        <tr t-foreach="statement.line_ids.sorted(key=lambda r: r.sequence, reverse = True)" t-as="line">
+                                           
+                                            <td>
+                                                <span t-field="line.date"/>
+                                            </td>
+                                             <td>
+                                                <span t-field="line.name"/>
+                                            </td>
+                                             <td>
+                                                <span t-field="line.ref"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.partner_id.name"/>
+                                            </td>
+                                             <td>
+                                                <span t-field="line.account_id"/>
+                                            </td>
+                                           
+                                            <td class="text-right">
+                                                <span t-field="line.amount"/>
+                                                <t t-set="total_cash" t-value="total_cash + line.amount"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <t t-if='total_cash'>
+                                        <tr>
+                                            <td colspan='5'></td>
+                                            <strong>
+                                                <td class="text-right">
+                                                    Subtotal:
+                                                    <strong>
+                                                        <span t-esc='total_cash'
+                                                              t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                                    </strong>
+                                                </td>
+                                            </strong>
+                                        </tr>
+                                        <span t-set="total_cash" t-value="0"/>
+                                    </t>
+                                    <t t-if="statement.journal_id.type == 'bank'">
+                                        <span t-set="total_credit" t-value="0"/>
+                                        <tr>
+                                            <td>
+                                                <b><span t-field="statement.journal_id"/></b>
+                                            </td>
+                                            <strong>
+                                                <td colspan='5'></td>
+                                            </strong>
+                                        </tr>
+                                        <tr t-foreach="statement.line_ids.sorted(key=lambda r: r.sequence, reverse = True)" t-as="line">
+                                            <td>
+                                                <span t-field="line.date"/>
+                                            </td>
+                                             <td>
+                                                <span t-field="line.name"/>
+                                            </td>
+                                             <td>
+                                                <span t-field="line.ref"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.partner_id.name"/>
+                                            </td>
+                                             <td>
+                                                <span t-field="line.account_id"/>
+                                            </td>
+                                           
+                                            <td class="text-right">
+                                                <span t-field="line.amount"/>
+                                                <t t-set="total_credit" t-value="total_credit + line.amount"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <t t-if='total_credit'>
+                                        <tr>
+                                            <td colspan='5'></td>
+                                            <strong>
+                                                <td class="text-right">
+                                                    Subtotal:
+                                                    <strong>
+                                                        <span t-esc='total_credit'
+                                                              t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                                    </strong>
+                                                </td>
+                                            </strong>
+                                        </tr>
+                                        <span t-set="total_credit" t-value="0"/>
+                                    </t>
+                            </tbody>
+                        </table> -->
+                       
+                        <br/>
+                        <br/>
+                    <table class="table-condensed" width="100%">
+                            <tr>
+                                <td width="50%" class="text-center">
+                                    <strong>Salesperson</strong>
+                                </td>
+                                <td width="50%" class="text-center">
+                                    <strong>Manager</strong>
+                                </td>
+                            </tr>
+                        </table> 
+                    </div>
+                </t>
+            </t>
+          </t>  
+        </template>
+    </data>
+</odoo>
+
