@@ -1,0 +1,15 @@
+Version 0.05 01/10/2021 by PR
+	ZB-7138-Error while downloading report
+
+Version 0.04 25/01/2021 by Thaslima
+	ZB-5461-Payment Summary values not coming
+
+
+Version 0.03 22/01/2021 by Thaslima
+	ZB-5461-Payment Summary values not coming
+
+Version 0.02 12/01/2021 by Dayana
+	*error solved in pos-reporting-orders
+
+Version 0.01 16/09/2020 by Dayana
+	* Migrated to Odoo13 from Odoo11

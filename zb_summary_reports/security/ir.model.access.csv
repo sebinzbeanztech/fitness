@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pos_company_analysis_user,access_pos_company_analysis,model_pos_company_analysis,base.group_user,1,1,1,1
+access_pos_product_summary_user,access_pos_product_summary,model_pos_product_summary,base.group_user,1,1,1,1
+access_pos_category_analysis_user,access_pos_category_analysis,model_pos_category_analysis,base.group_user,1,1,1,1
+access_pos_payment_analysis_user,access_pos_payment_analysis,model_pos_payment_analysis,base.group_user,1,1,1,1
+access_customer_sale_summary_user,access_customer_sale_summary,model_customer_sale_summary,base.group_user,1,1,1,1
+access_sale_summary_user,access_sale_summary,model_user_sale_summary,base.group_user,1,1,1,1
+access_pos_payment_analysis_user,access_pos_payment_analysis,model_pos_payment_analysis,base.group_user,1,1,1,1

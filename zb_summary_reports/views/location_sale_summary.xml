@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    
+      <record id="view_pos_company_analysis_tree" model="ir.ui.view">
+            <field name="name">pos.company.analysis.tree</field>
+            <field name="model">pos.company.analysis</field>
+            <field name="arch" type="xml">
+              <tree create="false">
+                <field name="company_id" invisible="1"/>
+                <field name="order"/>
+                <field name="qty"/>
+                <field name="order_date"/>
+                <field name="order_id" invisible="1"/>
+              </tree>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_pos_company_analysis_search">
+            <field name="name">pos.company.analysis.search</field>
+            <field name="model">pos.company.analysis</field>
+            <field name="arch" type="xml">
+                <search string="Company Summary">
+                    <field name="company_id" string="Company"/>
+                    <newline/>
+                    
+                    <filter string="Today" name="today" domain="[('order_date', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('order_date', '&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:23:59'))]"/>
+		            <filter string="Yesterday" name="yesterday" domain="[('order_date','&gt;=', ((context_today()-datetime.timedelta(days=1)).strftime('%Y-%m-%d 00:00:00'))), ('order_date','&lt;=', ((context_today()+datetime.timedelta(days=0)).strftime('%Y-%m-%d 00:00:00')))]"/>
+
+		            <filter string="Current Week" name="current_week" separator="1"
+		              domain="[
+		              ('order_date', '&gt;=', ((context_today()+ relativedelta(weeks=-1, days=1, weekday=0)).strftime('%%Y-%%m-%%d'))),
+		              ('order_date', '&lt;=', ((context_today()+ relativedelta(weeks=0, weekday=6)).strftime('%%Y-%%m-%%d')))]"
+		              help="Current Week"/>
+
+                    <filter string="Last week" name="last_Week" domain="[('order_date', '&gt;=', ((context_today()+relativedelta(weeks=-2,days=1, weekday=0)).strftime('%Y-%m-%d'))),('order_date', '&lt;=', ((context_today()+relativedelta(weeks=-1,weekday=6)).strftime('%Y-%m-%d')))]"/>
+
+                    <filter icon="terp-go-month" string="Month" name="month" domain="[('order_date','&lt;=',(datetime.date.today()+relativedelta(day=31)).strftime('%Y-%m-%d')),('order_date','&gt;=',(datetime.date.today()-relativedelta(day=1)).strftime('%Y-%m-%d'))]" help="Current Month"/>
+
+                    <filter string="Prev Month" name="prev_month" domain="[('order_date','&gt;=',(context_today()-relativedelta(months=1)).strftime('%Y-%m-01')),('order_date','&lt;',time.strftime('%Y-%m-01'))]"/>
+                    <group expand="1" string="Group By">
+                        <filter string="Company" name="company" context="{'group_by':'company_id'}"/>
+                        <filter string="Week" name="week" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'order_date:week'}"/>
+                        <filter string="Day" name="day" domain="[ ]" context="{'group_by': 'order_date:day'}" />
+                    </group> 
+                </search>
+            </field>
+        </record>
+        
+        
+        <record model="ir.actions.act_window" id="action_pos_company_analysis">
+            <field name="name">Company Summary</field>
+            <field name="res_model">pos.company.analysis</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="view_pos_company_analysis_search"/>
+            <field name="context">{'group_by': ['company_id','order_date:day']}</field>
+        </record>
+    
+    <!-- Reports menu item -->
+    <menuitem id="menu_pos_company_analysis" name="Company Summary" parent="menu_pos_sales" action="action_pos_company_analysis" sequence="5"/>
+    
+    </data>
+</odoo>
